@@ -1,0 +1,67 @@
+[
+    {
+        "domain": ".r10.net",
+        "expirationDate": 1792450201.802333,
+        "hostOnly": false,
+        "httpOnly": false,
+        "name": "_ga",
+        "path": "/",
+        "sameSite": null,
+        "secure": false,
+        "session": false,
+        "storeId": null,
+        "value": "GA1.1.1474221830.1757890202"
+    },
+    {
+        "domain": "www.r10.net",
+        "expirationDate": 1789426202.319044,
+        "hostOnly": true,
+        "httpOnly": false,
+        "name": "r10_ga_BH2NDKEFAS",
+        "path": "/",
+        "sameSite": "no_restriction",
+        "secure": true,
+        "session": false,
+        "storeId": null,
+        "value": "1.1.43853821.1699371016"
+    },
+    {
+        "domain": ".r10.net",
+        "expirationDate": 1792450201.802084,
+        "hostOnly": false,
+        "httpOnly": false,
+        "name": "_ga_GENL7Q06LX",
+        "path": "/",
+        "sameSite": null,
+        "secure": false,
+        "session": false,
+        "storeId": null,
+        "value": "GS2.1.s1757890201$o1$g0$t1757890201$j60$l0$h0"
+    },
+    {
+        "domain": "www.r10.net",
+        "expirationDate": 1789426200.598309,
+        "hostOnly": true,
+        "httpOnly": true,
+        "name": "r10preload",
+        "path": "/",
+        "sameSite": "no_restriction",
+        "secure": true,
+        "session": false,
+        "storeId": null,
+        "value": "1"
+    },
+    {
+        "domain": "www.r10.net",
+        "expirationDate": 1757893802.31914,
+        "hostOnly": true,
+        "httpOnly": true,
+        "name": "r10vb_fg",
+        "path": "/",
+        "sameSite": "no_restriction",
+        "secure": true,
+        "session": false,
+        "storeId": null,
+        "value": "1"
+    }
+]
