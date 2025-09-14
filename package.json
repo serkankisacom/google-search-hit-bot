@@ -1,0 +1,33 @@
+{
+  "name": "google-search-hit-bot",
+  "version": "1.0.0",
+  "description": "Google Search Hit Bot - Puppeteer-core ile Google'da arama yapıp belirlenen domainleri bulan, tıklayan ve insan benzeri gezinme yapan bot.",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "keywords": [
+    "puppeteer",
+    "google",
+    "search",
+    "bot",
+    "automation",
+    "seo",
+    "clickbot"
+  ],
+  "author": "serkankisacom",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/serkankisacom/google-search-hit-bot.git"
+  },
+  "bugs": {
+    "url": "https://github.com/serkankisacom/google-search-hit-bot/issues"
+  },
+  "homepage": "https://github.com/serkankisacom/google-search-hit-bot#readme",
+  "dependencies": {
+    "chalk": "^4.1.2",
+    "fs-extra": "^11.3.1",
+    "puppeteer-core": "^24.20.0"
+  }
+}

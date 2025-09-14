@@ -1,0 +1,14 @@
+{
+"domains": ["r10.net"], // Hedef domain(ler)
+"maxPages": 5, // Google’da taranacak max sayfa
+"keywordsFile": "keywords.txt", // Anahtar kelimeler listesi
+"cookiesFolder": "cookies", // Cookie dosyaları
+"proxiesFile": "proxies.txt", // Proxy listesi
+"headless": false, // true → arka planda çalışır
+"threads": 10, // Toplam thread
+"browseTime": 60000, // Site içinde gezinme süresi (ms)
+"maxClicks": 3, // Site içinde yapılacak max tıklama
+"spreadThreads": true, // Zamana yayma aktif/pasif
+"timeFrameHours": 6, // Thread’ler kaç saate yayılacak
+"executablePath": "C:/Program Files/Google/Chrome/Application/chrome.exe" // Chrome.exe'nin dosya yolu
+}
