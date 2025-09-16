@@ -1,4 +1,5 @@
 const fs = require("fs");
+const path = require("path");
 const chalk = require("chalk");
 const { connect } = require("puppeteer-real-browser");
 
@@ -6,6 +7,25 @@ const config = JSON.parse(fs.readFileSync("config.json", "utf8"));
 
 function sleep(ms) {
   return new Promise(r => setTimeout(r, ms));
+}
+
+function getRandomElement(arr) {
+  return arr[Math.floor(Math.random() * arr.length)];
+}
+// === Cookie loader (tek random cookie) ===
+function loadCookieFile(file) {
+  try {
+    const raw = fs.readFileSync(path.join(__dirname, config.cookiesFolder, file), "utf8");
+    const parsed = JSON.parse(raw);
+    const rawCookies = parsed.cookies || parsed;
+    return rawCookies.map(c => {
+      const { partitionKey, sourcePort, sourceScheme, size, priority, ...valid } = c;
+      return valid;
+    });
+  } catch (err) {
+    console.log(chalk.red(`[COOKIE PARSE ERROR] ${err.message}`));
+    return null;
+  }
 }
 
 // === Sayfa tamamen yüklenmesini bekle ===
@@ -169,7 +189,23 @@ async function runBot(threadId, proxy, keyword, cookieFile) {
 
     browser = response.browser;
     page = response.page;
-
+	
+    // Cookie yükleme (tek random)
+    if (cookieFile) {
+      const cookies = loadCookieFile(cookieFile);
+      if (cookies) {
+        try {
+          await page.setCookie(...cookies);
+          console.log(
+            chalk.green(
+              `[THREAD-${threadId}] Cookie yüklendi → ${cookieFile}`
+            )
+          );
+        } catch (err) {
+          console.log(chalk.red(`[THREAD-${threadId}] Cookie load error: ${err.message}`));
+        }
+      }
+    }
     console.log(chalk.yellow(`[SEARCH] Searching: ${keyword}`));
     await page.goto(`https://www.google.com/search?q=${encodeURIComponent(keyword)}`, {
       waitUntil: "load",
