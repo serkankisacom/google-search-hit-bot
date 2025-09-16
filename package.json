@@ -1,6 +1,6 @@
 {
   "name": "google-search-hit-bot",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Google Search Hit Bot - Puppeteer-core ile Google'da arama yapıp belirlenen domainleri bulan, tıklayan ve insan benzeri gezinme yapan bot.",
   "main": "app.js",
   "scripts": {
