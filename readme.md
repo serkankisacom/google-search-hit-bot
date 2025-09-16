@@ -1,13 +1,20 @@
 # 🔥 Google Search Click Bot
 
-Bu proje, **Node.js + Puppeteer-core** kullanarak Google üzerinde belirlenen anahtar kelimelerle arama yapan, verilen domainleri bulup tıklayan ve site üzerinde insan benzeri gezinti (scroll + random tıklamalar) gerçekleştiren bir bottur.
+Bu proje, **Node.js + Puppeteer-real-browser** kullanarak çoklu thread desteğiyle tarayıcı otomasyonu yapmayı öğretmek için hazırlanmıştır.
+İki ana dosyadan oluşur:
+
+* **app.js** → Thread yöneticisi. Belirtilen sayıda botu zamana yayarak çalıştırır.
+* **runbrowser.js** → Tek botun davranışlarını yönetir (proxy, cookie, User-Agent seçimi, gezinme, tıklama vb.).
+
+⚠️ **Not:** Proje yalnızca **eğitim ve test** amaçlıdır.
+Arama motoru sonuçlarını manipüle etme veya hizmet koşullarını ihlal eden amaçlarla kullanılamaz.
 
 ---
 
-## 🚀 Özellikler
+## ✨ Özellikler
 
 * 🌍 **Proxy desteği** → `hostname:port:user:pass` formatında (`proxies.txt`)
-* 🍪 **Cookie desteği** → `cookies/` klasöründeki `.json` veya `.txt` dosyaları **random seçilir**, tekrar kullanılmaz
+* 🍪 **Cookie desteği** → `cookies/` klasöründeki `.json` veya `.txt` dosyaları kullanılabilir
 * 📱 **User-Agent randomizasyonu** → mobil, tablet, desktop cihaz simülasyonu
 * 💻 **Viewport ayarı** → mobil (390x844), tablet (820x1180), desktop (1366x768)
 * 🎯 **Domain eşleştirme** → sadece `config.json` içinde belirtilen domainlere tıklar
@@ -15,7 +22,7 @@ Bu proje, **Node.js + Puppeteer-core** kullanarak Google üzerinde belirlenen an
 
   * Scroll hareketleri
   * Random link tıklamaları
-  * Belirlenen süre boyunca site içinde gezinme
+  * Belirlenen süre boyunca sayfa içinde gezinme
 * 🔀 **Thread sistemi**:
 
   * Çoklu bot paralel çalıştırma
@@ -29,14 +36,14 @@ Bu proje, **Node.js + Puppeteer-core** kullanarak Google üzerinde belirlenen an
 ### 1. Repository’i klonla
 
 ```bash
-git clone https://github.com/serkankisacom/google-search-click-bot.git
-cd google-search-click-bot
+git clone https://github.com/serkankisacom/browser-automation-edu.git
+cd browser-automation-edu
 ```
 
 ### 2. Bağımlılıkları yükle
 
 ```bash
-npm install puppeteer-core chalk user-agents
+npm install puppeteer-real-browser chalk
 ```
 
 ### 3. Chrome yolunu config’e ekle
