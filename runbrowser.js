@@ -119,7 +119,7 @@ async function handleGoogleCookies(page, threadId) {
     const html = await page.content();
     if (html.includes("Google'a devam etmeden önce")) {
       console.log(chalk.yellow(`[THREAD-${threadId}] Çerez ekranı bulundu, kabul ediliyor...`));
-      const btn = await page.$("#L2AGLb, #W0wltc");
+      const btn = await page.$("#L2AGLb");
       if (btn) {
         await elementClick(page, btn, threadId);
         console.log(chalk.green(`[THREAD-${threadId}] Çerezler kabul edildi.`));
@@ -163,6 +163,78 @@ async function browseSite(page, threadId) {
 
   console.log(chalk.green(`[THREAD-${threadId}] [BROWSE] Finished (Clicks: ${clicks}) ✅`));
 }
+async function setupOptimizedHeaders(page) {
+    await page.setExtraHTTPHeaders({
+        'Accept-Encoding': 'gzip, deflate, br',
+        'Accept-Language': 'tr-TR,tr;q=0.9,en-US;q=0.8,en;q=0.7',
+        'Cache-Control': 'max-age=0',
+        'Sec-Fetch-Dest': 'document',
+        'Sec-Fetch-Mode': 'navigate',
+        'Sec-Fetch-Site': 'none',
+        'Sec-Fetch-User': '?1',
+        'Upgrade-Insecure-Requests': '1',
+        'DNT': '1'
+    });
+}
+// Gelişmiş kaynak engelleme için fonksiyon
+async function setupAdvancedResourceBlocking(page) {
+    await page.setRequestInterception(true);
+
+    page.on("request", (req) => {
+        const url = req.url();
+        const resourceType = req.resourceType();
+
+        // Favicon ve gereksiz kaynakları engelle
+        if (url.includes("favicon.ico") || 
+            url.includes("icon") || 
+            url.endsWith(".png") || 
+            url.endsWith(".jpg") || 
+            url.endsWith(".jpeg") || 
+            url.endsWith(".gif") || 
+            url.endsWith(".svg")) {
+            return req.abort();
+        }
+
+        // Kritik olmayan kaynakları engelle
+        if (resourceType === "image" || 
+            resourceType === "media" || 
+            resourceType === "font" ||
+            url.includes("analytics") ||
+            url.includes("tracking") ||
+            url.includes("advertisement") ||
+            url.includes("banner") ||
+            url.includes("facebook") ||
+            url.includes("google-analytics") ||
+            url.includes("doubleclick") ||
+            url.endsWith(".woff") ||
+            url.endsWith(".woff2")) {
+            return req.abort();
+        }
+
+        // Google sonuç sayfasında sadece gerekli scriptler
+        if (url.includes("google.com/search")) {
+            if (resourceType === "script" && !url.includes("essential")) {
+                return req.abort();
+            }
+        }
+
+        // Hedef sitede gereksiz kaynaklar
+        if (!url.includes("google.com")) {
+            if (resourceType === "image" && !url.includes("logo")) {
+                return req.abort();
+            }
+            if (resourceType === "font") {
+                return req.abort();
+            }
+            if (resourceType === "media") {
+                return req.abort();
+            }
+        }
+
+        // Varsayılan devam
+        req.continue();
+    });
+}
 
 // === Ana Bot ===
 async function runBot(threadId, proxy, keyword, cookieFile) {
@@ -174,7 +246,46 @@ async function runBot(threadId, proxy, keyword, cookieFile) {
       headless: config.headless,
       fingerprint: true,
       turnstile: true,
-      args: ["--disable-blink-features=AutomationControlled"],
+      args: [
+		'--disable-blink-features=AutomationControlled',
+		'--disable-blink-features',
+		'--no-sandbox',
+		'--disable-setuid-sandbox',
+		'--disable-dev-shm-usage',
+		'--disable-accelerated-2d-canvas',
+		'--disable-gpu',
+		'--lang=tr-TR',
+		'--disable-infobars',
+		'--window-position=0,0',
+		'--ignore-certifcate-errors',
+		'--ignore-certifcate-errors-spki-list',
+		'--disable-background-timer-throttling',
+		'--disable-backgrounding-occluded-windows',
+		'--disable-renderer-backgrounding',
+		'--disable-renderer-throttling',
+		'--disable-ipc-flooding-protection',
+		'--enable-features=NetworkService,NetworkServiceInProcess',
+	    '--js-flags=--lite-mode',
+        '--disable-gpu',
+        '--disable-gpu-compositing',
+        '--disable-gpu-rasterization',
+        '--disable-gpu-sandbox',
+        '--disable-3d-apis',
+        '--disable-webgl',
+        '--disable-threaded-animation',
+        '--disable-threaded-scrolling',
+        '--disable-checker-imaging',
+        '--disable-popup-blocking',
+        '--disable-notifications',
+        '--disable-background-networking',
+        '--disable-background-timer-throttling',
+        '--disable-backgrounding-occluded-windows',
+        '--disable-breakpad',
+        '--disable-component-extensions-with-background-pages',
+        '--disable-extensions',
+        '--disable-features=TranslateUI,BlinkGenPropertyTrees',
+        '--disable-ipc-flooding-protection',
+        '--disable-site-isolation-trials'],
       customConfig: {
         executablePath: config.executablePath,
         defaultViewport: { width: 1366, height: 768 },
@@ -189,7 +300,8 @@ async function runBot(threadId, proxy, keyword, cookieFile) {
 
     browser = response.browser;
     page = response.page;
-	
+	await setupOptimizedHeaders(page);
+	await setupAdvancedResourceBlocking(page);
     // Cookie yükleme (tek random)
     if (cookieFile) {
       const cookies = loadCookieFile(cookieFile);
@@ -206,6 +318,7 @@ async function runBot(threadId, proxy, keyword, cookieFile) {
         }
       }
     }
+	
     console.log(chalk.yellow(`[SEARCH] Searching: ${keyword}`));
     await page.goto(`https://www.google.com/search?q=${encodeURIComponent(keyword)}`, {
       waitUntil: "load",
